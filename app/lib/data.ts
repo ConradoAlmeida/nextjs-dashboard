@@ -31,9 +31,10 @@ export async function fetchRevenue() {
 export async function fetchLatestInvoices() {
   try {
     const data = await sql<LatestInvoiceRaw>`
-      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
+      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id, status
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
+      WHERE status = 'paid'
       ORDER BY invoices.date DESC
       LIMIT 5`;
 
@@ -92,7 +93,7 @@ export async function fetchFilteredInvoices(
 
   try {
     const invoices = await sql<InvoicesTable>`
-      SELECT
+      SELECT 
         invoices.id,
         invoices.amount,
         invoices.date,
@@ -143,7 +144,7 @@ export async function fetchInvoicesPages(query: string) {
 export async function fetchInvoiceById(id: string) {
   try {
     const data = await sql<InvoiceForm>`
-      SELECT
+      SELECT 
         invoices.id,
         invoices.customer_id,
         invoices.amount,
@@ -186,7 +187,7 @@ export async function fetchCustomers() {
 export async function fetchFilteredCustomers(query: string) {
   try {
     const data = await sql<CustomersTableType>`
-		SELECT
+		SELECT 
 		  customers.id,
 		  customers.name,
 		  customers.email,
