@@ -9,8 +9,8 @@ import { fetchLatestProcessos } from '@/app/lib/data';
 
 
 
-export default async function LatestInvoices() {
-  const latestInvoices = await fetchLatestProcessos();
+export default async function LatestProcessos() {
+  const LatestProcessos = await fetchLatestProcessos();
 
   return (
     <div className="flex w-full flex-col md:col-span-4">
@@ -21,7 +21,7 @@ export default async function LatestInvoices() {
         {/* NOTE: Uncomment this code in Chapter 7 */}
 
         <div className="bg-white px-6">
-          {latestInvoices.map((invoice, i) => {
+          {LatestProcessos.map((invoice, i) => {
             return (
               <div
                 key={invoice.id}
