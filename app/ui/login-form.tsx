@@ -23,7 +23,7 @@ export default function LoginForm() {
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
-          Please log in to continue.
+          Logue para continuar.
         </h1>
         <div className="w-full">
           <div>
@@ -39,7 +39,7 @@ export default function LoginForm() {
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Enter your email address"
+                placeholder="Entre com seu email"
                 required
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -58,7 +58,7 @@ export default function LoginForm() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Enter password"
+                placeholder="Entre com seu password"
                 required
                 minLength={6}
               />
@@ -67,7 +67,7 @@ export default function LoginForm() {
           </div>
         </div>
         <Button className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          Entrar <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1"
           aria-live="polite"
