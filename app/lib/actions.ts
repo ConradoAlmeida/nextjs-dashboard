@@ -1,4 +1,6 @@
 'use server';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
@@ -62,7 +64,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   // Insert data into the database
   try {
     await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
+      INSERT INTO processos (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
@@ -72,9 +74,9 @@ export async function createInvoice(prevState: State, formData: FormData) {
     };
   }
  
-  // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  // Revalidate the cache for the processos page and redirect the user.
+  revalidatePath('/dashboard/processos');
+  redirect('/dashboard/processos');
 }
 
 export async function updateInvoice(
@@ -100,7 +102,7 @@ export async function updateInvoice(
  
   try {
     await sql`
-      UPDATE invoices
+      UPDATE processos
       SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
       WHERE id = ${id}
     `;
@@ -108,8 +110,8 @@ export async function updateInvoice(
     return { message: 'Database Error: Failed to Update Invoice.' };
   }
  
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard/processos');
+  redirect('/dashboard/processos');
 }
 
 
@@ -118,10 +120,30 @@ export async function updateInvoice(
     // throw new Error('Failed to Delete Invoice');
 
     try{
-      await sql`DELETE FROM invoices WHERE id = ${id}`;
-      revalidatePath('/dashboard/invoices');
+      await sql`DELETE FROM processos WHERE id = ${id}`;
+      revalidatePath('/dashboard/processos');
       return { message: 'Deleted Invoite.' };
     } catch (error) {
       return { message: 'Database Error: Failed to Delete Invoice.' };
+    }
+  }
+
+
+  export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData,
+  ) {
+    try {
+      await signIn('credentials', formData);
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case 'CredentialsSignin':
+            return 'Invalid credentials.';
+          default:
+            return 'Something went wrong.';
+        }
+      }
+      throw error;
     }
   }
