@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/app/ui/processos/buttons';
+import { UpdateProcesso, DeleteProcesso } from '@/app/ui/processos/buttons';
 import InvoiceStatus from '@/app/ui/processos/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredProcessos } from '@/app/lib/data';
@@ -47,8 +47,8 @@ export default async function InvoicesTable({
                     <p>{formatDateToLocal(processo.date)}</p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateInvoice id={processo.id} />
-                    <DeleteInvoice id={processo.id} />
+                    <UpdateProcesso id={processo.id} />
+                    <DeleteProcesso id={processo.id} />
                   </div>
                 </div>
               </div>
@@ -78,39 +78,39 @@ export default async function InvoicesTable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {processos?.map((invoice) => (
+              {processos?.map((processo) => (
                 <tr
-                  key={invoice.id}
+                  key={processo.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <Image
-                        src={invoice.image_url}
+                        src={processo.image_url}
                         className="rounded-full"
                         width={28}
                         height={28}
-                        alt={`${invoice.name}'s profile picture`}
+                        alt={`${processo.name}'s profile picture`}
                       />
-                      <p>{invoice.name}</p>
+                      <p>{processo.name}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {invoice.email}
+                    {processo.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(invoice.amount)}
+                    {formatCurrency(processo.amount)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(invoice.date)}
+                    {formatDateToLocal(processo.date)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    <InvoiceStatus status={invoice.status} />
+                    <InvoiceStatus status={processo.status} />
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={invoice.id} />
-                      <DeleteInvoice id={invoice.id} />
+                      <UpdateProcesso id={processo.id} />
+                      <DeleteProcesso id={processo.id} />
                     </div>
                   </td>
                 </tr>

@@ -6,12 +6,12 @@ import { notFound } from 'next/navigation';
 export default async function Page(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     const id = params.id;
-    const [invoice, customers] = await Promise.all([
+    const [processo, customers] = await Promise.all([
         fetchProcessoById(id),
         fetchCustomers(),
     ]);
  
-    if (!invoice){
+    if (!processo){
       notFound();
     }
 
@@ -19,7 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/processos' },
+          { label: 'Processos', href: '/dashboard/processos' },
           {
             label: 'Edit Invoice',
             href: `/dashboard/processos/${id}/edit`,
@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form invoice={invoice} customers={customers} />
+      <Form processo={processo} customers={customers} />
     </main>
   );
 }

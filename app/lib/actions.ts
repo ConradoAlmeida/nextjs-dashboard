@@ -26,8 +26,8 @@ const FormSchema = z.object({
 
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true});
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+const CreateProcesso = FormSchema.omit({ id: true, date: true});
+const UpdateProcesso = FormSchema.omit({ id: true, date: true });
 
 export type State = {
   errors?: {
@@ -40,9 +40,9 @@ export type State = {
 
 
 
-export async function createInvoice(prevState: State, formData: FormData) {
+export async function createProcesso(prevState: State, formData: FormData) {
   // Validate form using Zod
-  const validatedFields = CreateInvoice.safeParse({
+  const validatedFields = CreateProcesso.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
@@ -79,12 +79,12 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/processos');
 }
 
-export async function updateInvoice(
+export async function updateProcesso(
   id: string,
   prevState: State,
   formData: FormData,
 ) {
-  const validatedFields = UpdateInvoice.safeParse({
+  const validatedFields = UpdateProcesso.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
@@ -116,7 +116,7 @@ export async function updateInvoice(
 
 
 
-  export async function deleteInvoice(id: string) {
+  export async function deleteProcesso(id: string) {
     // throw new Error('Failed to Delete Invoice');
 
     try{
