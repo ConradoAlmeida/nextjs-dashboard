@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomerField, ProcessoForm } from '@/app/lib/definitions';
+import { CasoForm, CustomerField } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,
@@ -16,14 +16,14 @@ import { useActionState } from 'react';
 
 
 export default function EditProcessoForm({
-  processo,
-  customers,
+  caso,
+  cliente,
 }: {
-  processo: ProcessoForm;
-  customers: CustomerField[];
+  caso: CasoForm;
+  cliente: CustomerField[];
 }) {
   const initialState: State = { message: null, errors: {} };
-  const updateProcessoWithId = updateProcesso.bind(null, processo.id);
+  const updateProcessoWithId = updateProcesso.bind(null, caso.id);
   const [state, formAction] = useActionState(updateProcessoWithId, initialState);
   return (
     <form action={formAction}>
@@ -38,14 +38,14 @@ export default function EditProcessoForm({
               id="customer"
               name="customerId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={processo.customer_id}
+              defaultValue={caso.cliente_uuid}
             >
               <option value="" disabled>
                 Escolha o Cliente
               </option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
+              {cliente.map((cliente) => (
+                <option key={cliente.id} value={cliente.id}>
+                  {cliente.nome}
                 </option>
               ))}
             </select>
@@ -65,7 +65,7 @@ export default function EditProcessoForm({
                 name="amount"
                 type="number"
                 step="0.01"
-                defaultValue={processo.amount}
+                defaultValue={caso.situacao}
                 placeholder="Enter USD amount"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
@@ -87,7 +87,7 @@ export default function EditProcessoForm({
                   name="status"
                   type="radio"
                   value="pending"
-                  defaultChecked={processo.status === 'pending'}
+                  defaultChecked={caso.situacao === 'pending'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -103,7 +103,7 @@ export default function EditProcessoForm({
                   name="status"
                   type="radio"
                   value="paid"
-                  defaultChecked={processo.status === 'paid'}
+                  defaultChecked={caso.situacao === 'paid'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
