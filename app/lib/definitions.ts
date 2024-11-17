@@ -16,6 +16,12 @@ export type Customer = {
   image_url: string;
 };
 
+export type Cliente = {
+  id: string;
+  nome: string;
+  email: string;
+};
+
 export type Processo = {
   id: string;
   customer_id: string;
@@ -39,6 +45,19 @@ export type LatestProcesso = {
   amount: string;
 };
 
+
+// implementacao da tabela casos do banco de dados
+export type UltimosCasos = {
+  id: string;
+  nprocesso: string;
+  resumo: string;
+  data: string;
+  vara: string;
+  situacao: string;
+  cliente_id: string;
+};
+
+
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestProcessoRaw = Omit<LatestProcesso, 'amount'> & {
   amount: number;
@@ -53,6 +72,19 @@ export type ProcessosTable = {
   date: string;
   amount: number;
   status: 'pending' | 'paid';
+};
+
+export type TabelaCasos = {
+
+  id: string;
+  nprocesso: string;
+  resumo: string;
+  data: string;
+  vara: string;
+  situacao: string;
+  cliente_id: string;
+  nome: string;
+  email: string;
 };
 
 export type CustomersTableType = {
@@ -85,4 +117,26 @@ export type ProcessoForm = {
   customer_id: string;
   amount: number;
   status: 'pending' | 'paid';
+};
+
+export type CasoForm = {
+  id: string;
+  cliente_uuid: string;
+  nprocessp: string;
+  situacao: string;
+};
+
+
+
+
+export type CasosData = {
+  ano: string;
+  mes: string;
+  quantidade_processos: string;
+};
+
+
+export interface YAxisLabels {
+  yAxisLabels: number[];
+  topLabel: number;
 };

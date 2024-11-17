@@ -1,13 +1,18 @@
 // import { Card } from '@/app/ui/dashboard/cards';
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
+import RevenueChart from '@/app/ui/dashboard/casos-grafico';
 import LatestInvoices from '@/app/ui/dashboard/latest-processos';
 import { lusitana } from '@/app/ui/fonts';
 // import { fetchCardData } from '@/app/lib/data';
 import { Suspense } from 'react';
 import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardSkeleton } from '@/app/ui/skeletons';
 import CardWrapper from '@/app/ui/dashboard/cards';
+
+import { buscaCasosData } from '@/app/lib/data';
+import CasosDataChart from '@/app/ui/dashboard/casos-grafico';
  
 export default async function Page() {
+  const casosData = await buscaCasosData();
+  console.log(casosData)
 
   return (
     <main>
@@ -21,7 +26,8 @@ export default async function Page() {
       </div>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <Suspense fallback={<RevenueChartSkeleton />}>
-        <RevenueChart />
+        {/* <RevenueChart /> */}
+        <CasosDataChart casosData={casosData}/>
         </Suspense>
 
         <Suspense fallback={<LatestInvoicesSkeleton />}>

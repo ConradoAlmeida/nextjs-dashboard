@@ -21,7 +21,16 @@ export const formatDateToLocal = (
   return formatter.format(date);
 };
 
-export const generateYAxis = (revenue: Revenue[]) => {
+// export function generateYAxis(data) {
+//   const maxQuantidade = Math.max(...data.map(d => parseInt(d.quantidade_processos, 10)));
+//   const yAxisLabels = Array.from({ length: 5 }, (_, i) => Math.ceil((maxQuantidade / 4) * i));
+//   return { yAxisLabels, topLabel: Math.ceil(maxQuantidade)
+
+//   }; }
+
+
+
+export const generateYAxisOld = (revenue: Revenue[]) => {
   // Calculate what labels we need to display on the y-axis
   // based on highest record and in 1000s
   const yAxisLabels = [];
