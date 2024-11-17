@@ -1,23 +1,23 @@
-import Form from '@/app/ui/processos/create-form';
-import Breadcrumbs from '@/app/ui/processos/breadcrumbs';
-import { fetchCustomers } from '@/app/lib/data';
+import Form from '@/app/ui/casos/create-form';
+import Breadcrumbs from '@/app/ui/casos/breadcrumbs';
+import { buscaClientes } from '@/app/lib/data';
  
 export default async function Page() {
-  const customers = await fetchCustomers();
+  const clientes = await buscaClientes();
  
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Processos', href: '/dashboard/processos' },
+          { label: 'Casos', href: '/dashboard/casos' },
           {
-            label: 'Novo Processo',
-            href: '/dashboard/processos/create',
+            label: 'Novo Caso',
+            href: '/dashboard/casos/create',
             active: true,
           },
         ]}
       />
-      <Form customers={customers} />
+      <Form clientes={clientes} />
     </main>
   );
 }

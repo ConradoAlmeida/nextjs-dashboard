@@ -113,6 +113,11 @@ export type CustomerField = {
   name: string;
 };
 
+export type CampoCliente = {
+  id: string;
+  nome: string;
+};
+
 export type ProcessoForm = {
   id: string;
   customer_id: string;

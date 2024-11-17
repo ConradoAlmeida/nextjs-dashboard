@@ -1,5 +1,5 @@
-import Form from '@/app/ui/processos/edit-form';
-import Breadcrumbs from '@/app/ui/processos/breadcrumbs';
+import Form from '@/app/ui/casos/edit-form';
+import Breadcrumbs from '@/app/ui/casos/breadcrumbs';
 import { fetchCustomers, fetchProcessoById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
  

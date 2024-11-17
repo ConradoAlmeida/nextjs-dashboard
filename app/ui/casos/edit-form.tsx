@@ -31,7 +31,7 @@ export default function EditProcessoForm({
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+            Escolha o Cliente
           </label>
           <div className="relative">
             <select
@@ -41,7 +41,7 @@ export default function EditProcessoForm({
               defaultValue={processo.customer_id}
             >
               <option value="" disabled>
-                Select a customer
+                Escolha o Cliente
               </option>
               {customers.map((customer) => (
                 <option key={customer.id} value={customer.id}>

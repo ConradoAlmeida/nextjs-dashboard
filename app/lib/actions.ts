@@ -1,7 +1,6 @@
 'use server';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
@@ -11,29 +10,48 @@ import { redirect } from 'next/navigation';
 const FormSchema = z.object({
     id: z.string(),
 
-    customerId: z.string({
-      invalid_type_error: 'Please select a customer,',
+    clienteId: z.string({
+      invalid_type_error: 'Selecione um cliente,',
     }),
 
-    amount: z.coerce
-    .number()
-    .gt(0, { message: 'Please enter an amount greater than $0.' }),
-
-    status: z.enum(['pending', 'paid'], {
-      invalid_type_error: 'Please select an invoice status.',
+    situacao: z.string({
+      invalid_type_error: 'Digite a situação,',
     }),
+
+    vara: z.string({
+      invalid_type_error: 'Digite a vara,',
+    }),
+
+    resumo: z.string({
+      invalid_type_error: 'Digite um resumo,',
+    }),
+
+    nprocesso: z.string({
+      invalid_type_error: 'Digite o número do processo,',
+    }),
+
+
     date: z.string(),
 
 });
 
-const CreateProcesso = FormSchema.omit({ id: true, date: true});
+
+const CriarCaso = FormSchema.omit({ id: true, date: true});
+
+ 
+
+
+
+
 const UpdateProcesso = FormSchema.omit({ id: true, date: true });
 
 export type State = {
   errors?: {
-    customerId?: string[];
-    amount?: string[];
-    status?: string[];
+    clienteId?: string[];
+    situacao?: string[];
+    vara?: string[];
+    nprocesso?: string[];
+    resumo?: string[];
   };
   message?: string | null;
 };
@@ -42,7 +60,57 @@ export type State = {
 
 export async function createProcesso(prevState: State, formData: FormData) {
   // Validate form using Zod
-  const validatedFields = CreateProcesso.safeParse({
+
+  console.log('deu certo')
+  
+
+  const validatedFields = CriarCaso.safeParse({
+    clienteId: formData.get('cliente_uuid'),
+    nprocesso: formData.get('nprocesso'),
+    resumo: formData.get('resumo'),
+    vara: formData.get('vara'),
+    situacao: formData.get('situacao'),
+  });
+  
+  console.log(validatedFields);
+  
+  
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Invoice.',
+    };
+  }
+  
+  // Prepare data for insertion into the database
+  const { clienteId, situacao, vara } = validatedFields.data;
+  const date = new Date().toISOString().split('T')[0];
+  
+  // Insert data into the database
+
+
+  try {
+    await sql`
+      INSERT INTO casos (cliente_uuid, nprocesso, resumo, data, vara, situacao )
+      VALUES (${clienteId}, ${situacao}, ${vara}, ${date})
+    `;
+
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
+ 
+  // Revalidate the cache for the processos page and redirect the user.
+  revalidatePath('/dashboard/casos');
+  redirect('/dashboard/casos');
+}
+
+export async function criarCaso(prevState: State, formData: FormData) {
+  // Validate form using Zod
+  const validatedFields = CriarCaso.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
@@ -57,15 +125,15 @@ export async function createProcesso(prevState: State, formData: FormData) {
   }
  
   // Prepare data for insertion into the database
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
+  const { clienteId, situacao, vara } = validatedFields.data;
+  
   const date = new Date().toISOString().split('T')[0];
  
   // Insert data into the database
   try {
     await sql`
-      INSERT INTO processos (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      INSERT INTO casos (cliente_uuid, situacao, vara, date)
+      VALUES (${clienteId}, ${situacao}, ${vara}, ${date})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -75,8 +143,8 @@ export async function createProcesso(prevState: State, formData: FormData) {
   }
  
   // Revalidate the cache for the processos page and redirect the user.
-  revalidatePath('/dashboard/processos');
-  redirect('/dashboard/processos');
+  revalidatePath('/dashboard/casos');
+  redirect('/dashboard/casos');
 }
 
 export async function updateProcesso(
@@ -97,21 +165,20 @@ export async function updateProcesso(
     };
   }
  
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
+  const { clienteId, situacao, vara } = validatedFields.data;
  
   try {
     await sql`
-      UPDATE processos
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+      UPDATE casos
+      SET customer_id = ${clienteId}, amount = ${situacao}, status = ${vara}
       WHERE id = ${id}
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Update Invoice.' };
   }
  
-  revalidatePath('/dashboard/processos');
-  redirect('/dashboard/processos');
+  revalidatePath('/dashboard/casos');
+  redirect('/dashboard/casos');
 }
 
 
@@ -121,7 +188,7 @@ export async function updateProcesso(
 
     try{
       await sql`DELETE FROM processos WHERE id = ${id}`;
-      revalidatePath('/dashboard/processos');
+      revalidatePath('/dashboard/casos');
       return { message: 'Deleted Invoite.' };
     } catch (error) {
       return { message: 'Database Error: Failed to Delete Invoice.' };

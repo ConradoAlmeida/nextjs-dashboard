@@ -1,7 +1,7 @@
 import Pagination from '@/app/ui/casos/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/casos/table';
-import { CreateProcesso } from '@/app/ui/processos/buttons';
+import { CriarCaso, } from '@/app/ui/casos/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { InvoiceSkeleton} from '@/app/ui/skeletons';
 import { Suspense } from 'react';
@@ -13,6 +13,7 @@ export default async function Page(props: {
     query?: string;
     page?: string;
   }>;
+
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
@@ -28,7 +29,7 @@ export default async function Page(props: {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Procurar em processos..." />
-        <CreateProcesso />
+        <CriarCaso />
       </div>
 
        <Suspense key={query + currentPage} fallback={<InvoiceSkeleton/>}>

@@ -12,7 +12,6 @@ import CasosDataChart from '@/app/ui/dashboard/casos-grafico';
  
 export default async function Page() {
   const casosData = await buscaCasosData();
-  console.log(casosData)
 
   return (
     <main>

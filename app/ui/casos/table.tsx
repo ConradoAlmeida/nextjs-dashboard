@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import { UpdateProcesso, DeleteProcesso } from '@/app/ui/casos/buttons';
 import InvoiceStatus from '@/app/ui/casos/status';
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
+import { formatDateToLocal } from '@/app/lib/utils';
 import { buscaCasosFiltrados } from '@/app/lib/data';
 
 export default async function TabelaCasos({
@@ -38,7 +37,7 @@ export default async function TabelaCasos({
                     <p className="text-xl font-medium">
                       {caso.resumo}
                     </p>
-                    {/* <p>{formatDateToLocal(processo.date)}</p> */}
+                    <p>{formatDateToLocal(caso.data)}</p>
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdateProcesso id={caso.id} />

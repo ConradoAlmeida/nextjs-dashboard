@@ -1,6 +1,5 @@
 import { sql } from '@vercel/postgres';
 import {
-  CustomerField,
   CustomersTableType,
   ProcessoForm,
   ProcessosTable,
@@ -9,15 +8,14 @@ import {
   UltimosCasos,
   TabelaCasos,
   CasoForm,
-  CasosData
+  CasosData,
+  CampoCliente
 
 } from './definitions';
 import { formatCurrency } from './utils';
 
 export async function fetchRevenue() {
   try {
-
-    // console.log('Fetching revenue data...');
 
     const data = await sql<Revenue>`SELECT * FROM revenue`;
 
@@ -161,7 +159,6 @@ export async function fetchProcessoById(id: string) {
       amount: Processo.amount / 100,
     }));
     
-    console.log(Processo);    
     return Processo[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -169,18 +166,19 @@ export async function fetchProcessoById(id: string) {
   }
 }
 
-export async function fetchCustomers() {
+export async function buscaClientes() {
   try {
-    const data = await sql<CustomerField>`
+    const data = await sql<CampoCliente>`
     SELECT
     id,
-    name
-    FROM customers
-    ORDER BY name ASC
+    nome
+    FROM clientes
+    ORDER BY nome ASC
     `;
     
-    const customers = data.rows;
-    return customers;
+    const clientes = data.rows;
+
+    return clientes;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all customers.');
@@ -280,9 +278,7 @@ export async function buscaCasosFiltrados(
     ORDER BY casos.data DESC
     LIMIT ${CASOS_ITENS_POR_PAGINA} OFFSET ${offset}
     `;
-    // console.log('--------')
-    // console.log(casos.rows)
-    // console.log('--------')
+    
     return casos.rows;
     
   } catch (error) {
@@ -329,7 +325,6 @@ export async function buscaCasosPorId(id: string) {
       // amount: Caso.amount / 100,
     }));
     
-    console.log(Caso);    
     return Caso[0];
   } catch (error) {
     console.error('Database Error:', error);
