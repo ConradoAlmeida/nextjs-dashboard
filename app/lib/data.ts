@@ -1,10 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
-  CustomersTableType,
-  ProcessoForm,
-  ProcessosTable,
-  LatestProcessoRaw,
-  Revenue,
+
   UltimosCasos,
   TabelaCasos,
   CasoForm,
@@ -14,38 +10,38 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
-export async function fetchRevenue() {
-  try {
+// export async function fetchRevenue() {
+//   try {
 
-    const data = await sql<Revenue>`SELECT * FROM revenue`;
+//     const data = await sql<Revenue>`SELECT * FROM revenue`;
 
-    return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
-  }
-}
+//     return data.rows;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch revenue data.');
+//   }
+// }
 
-export async function fetchLatestProcessos() {
-  try {
-    const data = await sql<LatestProcessoRaw>`
-      SELECT processos.amount, customers.name, customers.image_url, customers.email, processos.id, status
-      FROM processos
-      JOIN customers ON processos.customer_id = customers.id
-      WHERE status = 'paid'
-      ORDER BY processos.date DESC
-      LIMIT 5`;
+// export async function fetchLatestProcessos() {
+//   try {
+//     const data = await sql<LatestProcessoRaw>`
+//       SELECT processos.amount, customers.name, customers.image_url, customers.email, processos.id, status
+//       FROM processos
+//       JOIN customers ON processos.customer_id = customers.id
+//       WHERE status = 'paid'
+//       ORDER BY processos.date DESC
+//       LIMIT 5`;
 
-    const latestProcessos = data.rows.map((Processo) => ({
-      ...Processo,
-      amount: formatCurrency(Processo.amount),
-    }));
-    return latestProcessos;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest processos.');
-  }
-}
+//     const latestProcessos = data.rows.map((Processo) => ({
+//       ...Processo,
+//       amount: formatCurrency(Processo.amount),
+//     }));
+//     return latestProcessos;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch the latest processos.');
+//   }
+// }
 
 export async function fetchCardData() {
   try {
@@ -84,87 +80,87 @@ export async function fetchCardData() {
 
 const ITEMS_PER_PAGE = 6;
 
-export async function fetchFilteredProcessos(
-  query: string,
-  currentPage: number,
-) {
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+// export async function fetchFilteredProcessos(
+//   query: string,
+//   currentPage: number,
+// ) {
+//   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   
-  try {
-    const processos = await sql<ProcessosTable>`
-    SELECT 
-    processos.id,
-    processos.amount,
-    processos.date,
-    processos.status,
-    customers.name,
-    customers.email,
-    customers.image_url
-    FROM processos
-    JOIN customers ON processos.customer_id = customers.id
-    WHERE
-    customers.name ILIKE ${`%${query}%`} OR
-    customers.email ILIKE ${`%${query}%`} OR
-    processos.amount::text ILIKE ${`%${query}%`} OR
-    processos.date::text ILIKE ${`%${query}%`} OR
-    processos.status ILIKE ${`%${query}%`}
-    ORDER BY processos.date DESC
-    LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
+//   try {
+//     const processos = await sql<ProcessosTable>`
+//     SELECT 
+//     processos.id,
+//     processos.amount,
+//     processos.date,
+//     processos.status,
+//     customers.name,
+//     customers.email,
+//     customers.image_url
+//     FROM processos
+//     JOIN customers ON processos.customer_id = customers.id
+//     WHERE
+//     customers.name ILIKE ${`%${query}%`} OR
+//     customers.email ILIKE ${`%${query}%`} OR
+//     processos.amount::text ILIKE ${`%${query}%`} OR
+//     processos.date::text ILIKE ${`%${query}%`} OR
+//     processos.status ILIKE ${`%${query}%`}
+//     ORDER BY processos.date DESC
+//     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+//     `;
     
-    return processos.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch processos.');
-  }
-}
+//     return processos.rows;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch processos.');
+//   }
+// }
 
-export async function fetchProcessosPages(query: string) {
-  try {
-    const count = await sql`SELECT COUNT(*)
-    FROM processos
-    JOIN customers ON processos.customer_id = customers.id
-    WHERE
-    customers.name ILIKE ${`%${query}%`} OR
-    customers.email ILIKE ${`%${query}%`} OR
-    processos.amount::text ILIKE ${`%${query}%`} OR
-    processos.date::text ILIKE ${`%${query}%`} OR
-    processos.status ILIKE ${`%${query}%`}
-    `;
+// export async function fetchProcessosPages(query: string) {
+//   try {
+//     const count = await sql`SELECT COUNT(*)
+//     FROM processos
+//     JOIN customers ON processos.customer_id = customers.id
+//     WHERE
+//     customers.name ILIKE ${`%${query}%`} OR
+//     customers.email ILIKE ${`%${query}%`} OR
+//     processos.amount::text ILIKE ${`%${query}%`} OR
+//     processos.date::text ILIKE ${`%${query}%`} OR
+//     processos.status ILIKE ${`%${query}%`}
+//     `;
     
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of processos.');
-  }
-}
+//     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+//     return totalPages;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch total number of processos.');
+//   }
+// }
 
 
-export async function fetchProcessoById(id: string) {
-  try {
-    const data = await sql<ProcessoForm>`
-    SELECT 
-    processos.id,
-    processos.customer_id,
-    processos.amount,
-    processos.status
-    FROM processos
-    WHERE processos.id = ${id};
-    `;
+// export async function fetchProcessoById(id: string) {
+//   try {
+//     const data = await sql<ProcessoForm>`
+//     SELECT 
+//     processos.id,
+//     processos.customer_id,
+//     processos.amount,
+//     processos.status
+//     FROM processos
+//     WHERE processos.id = ${id};
+//     `;
     
-    const Processo = data.rows.map((Processo) => ({
-      ...Processo,
-      // Convert amount from cents to dollars
-      amount: Processo.amount / 100,
-    }));
+//     const Processo = data.rows.map((Processo) => ({
+//       ...Processo,
+//       // Convert amount from cents to dollars
+//       amount: Processo.amount / 100,
+//     }));
     
-    return Processo[0];
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch Processo.');
-  }
-}
+//     return Processo[0];
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch Processo.');
+//   }
+// }
 
 export async function buscaClientes() {
   try {
@@ -185,38 +181,38 @@ export async function buscaClientes() {
   }
 }
 
-export async function fetchFilteredCustomers(query: string) {
-  try {
-    const data = await sql<CustomersTableType>`
-		SELECT 
-    customers.id,
-    customers.name,
-    customers.email,
-    customers.image_url,
-    COUNT(processos.id) AS total_processos,
-    SUM(CASE WHEN processos.status = 'pending' THEN processos.amount ELSE 0 END) AS total_pending,
-    SUM(CASE WHEN processos.status = 'paid' THEN processos.amount ELSE 0 END) AS total_paid
-		FROM customers
-		LEFT JOIN processos ON customers.id = processos.customer_id
-		WHERE
-    customers.name ILIKE ${`%${query}%`} OR
-    customers.email ILIKE ${`%${query}%`}
-		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
+// export async function fetchFilteredCustomers(query: string) {
+//   try {
+//     const data = await sql<CustomersTableType>`
+// 		SELECT 
+//     customers.id,
+//     customers.name,
+//     customers.email,
+//     customers.image_url,
+//     COUNT(processos.id) AS total_processos,
+//     SUM(CASE WHEN processos.status = 'pending' THEN processos.amount ELSE 0 END) AS total_pending,
+//     SUM(CASE WHEN processos.status = 'paid' THEN processos.amount ELSE 0 END) AS total_paid
+// 		FROM customers
+// 		LEFT JOIN processos ON customers.id = processos.customer_id
+// 		WHERE
+//     customers.name ILIKE ${`%${query}%`} OR
+//     customers.email ILIKE ${`%${query}%`}
+// 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
+// 		ORDER BY customers.name ASC
+// 	  `;
     
-    const customers = data.rows.map((customer) => ({
-      ...customer,
-      total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
-    }));
+//     const customers = data.rows.map((customer) => ({
+//       ...customer,
+//       total_pending: formatCurrency(customer.total_pending),
+//       total_paid: formatCurrency(customer.total_paid),
+//     }));
     
-    return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
-  }
-}
+//     return customers;
+//   } catch (err) {
+//     console.error('Database Error:', err);
+//     throw new Error('Failed to fetch customer table.');
+//   }
+// }
 
 
 // funcoes para os novos dados casos e clientes no postgres
