@@ -228,17 +228,23 @@ const CASOS_ITENS_POR_PAGINA = 10;
 export async function buscaUltimosCasos() {
   try {
     const data = await sql<UltimosCasos>`
-    SELECT casos.nprocesso, casos.resumo, casos.data, casos.vara, clientes.email, casos.id, situacao
+    SELECT casos.nprocesso, casos.resumo, casos.data, casos.vara, clientes.email, casos.id, situacao, clientes.nome
     FROM casos
     JOIN clientes ON casos.cliente_uuid = clientes.id
     WHERE situacao = 'Aberto'
     ORDER BY casos.data DESC
-    LIMIT 2`;
+    LIMIT 5`;
     
     const ultimosCasos = data.rows.map((Caso) => ({
       ...Caso,
-      // amount: formatCurrency(Caso.amount),
+  data: new Date(Caso.data).toLocaleDateString('pt-BR')
+
     }));
+
+
+
+
+
     return ultimosCasos;
   } catch (error) {
     console.error('Database Error:', error);

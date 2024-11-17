@@ -55,6 +55,7 @@ export type UltimosCasos = {
   vara: string;
   situacao: string;
   cliente_id: string;
+  nome: string;
 };
 
 
